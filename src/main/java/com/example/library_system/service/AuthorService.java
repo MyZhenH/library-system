@@ -28,8 +28,8 @@ public class AuthorService {
     public Map<String, String> addAuthor (Author author) {
         Map<String, String> response = new HashMap<>();
 
-        try {
-            authorRepository.save(author);
+            try {
+                authorRepository.save(author);
             response.put("status", "success");
             response.put("message", "Author added " + author.toString());
             return response;
