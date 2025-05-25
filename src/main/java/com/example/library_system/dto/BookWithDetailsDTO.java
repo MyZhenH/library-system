@@ -1,31 +1,30 @@
 package com.example.library_system.dto;
 
 public class BookWithDetailsDTO {
-
-    private BookDTO bookDTO;
-    private AuthorDTO authorDTO;
+    private BookDTO book;
+    private AuthorDTO author;
 
     public BookWithDetailsDTO() {
     }
 
-    public BookWithDetailsDTO(BookDTO bookDTO, AuthorDTO authorDTO) {
-        this.bookDTO = bookDTO;
-        this.authorDTO = authorDTO;
+    public BookWithDetailsDTO(BookDTO book, AuthorDTO author) {
+        this.book = book;
+        this.author = author;
     }
 
-    public BookDTO getBookDTO() {
-        return bookDTO;
+    public BookDTO getBook() {
+        return book;
     }
 
-    public void setBookDTO(BookDTO bookDTO) {
-        this.bookDTO = bookDTO;
+    public void setBook(BookDTO book) {
+        this.book = book;
     }
 
-    public AuthorDTO getAuthorDTO() {
-        return authorDTO;
+    public AuthorDTO getAuthor() {
+        return author;
     }
 
-    public void setAuthorDTO(AuthorDTO authorDTO) {
-        this.authorDTO = authorDTO;
+    public void setAuthor(AuthorDTO author) {
+        this.author = author;
     }
 }

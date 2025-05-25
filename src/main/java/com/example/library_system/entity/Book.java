@@ -14,7 +14,13 @@ public class Book {
     private int publicationYear;
     private int availableCopies;
     private int totalCopies;
-    private Long authorId;
+
+    //@Column(name = "author_id")
+    //private Long authorId;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     public Book() {
     }
@@ -25,7 +31,7 @@ public class Book {
         this.publicationYear = publicationYear;
         this.availableCopies = availableCopies;
         this.totalCopies = totalCopies;
-        this.authorId = authorId;
+        //this.authorId = authorId;
     }
 
     public Long getBookId() {
@@ -60,13 +66,13 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    public Long getAuthorId() {
-        return authorId;
-    }
+    //public Long getAuthorId() {
+      //  return authorId;
+    //}
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
+    //public void setAuthorId(Long authorId) {
+      //  this.authorId = authorId;
+    //}
 
     public int getTotalCopies() {
         return totalCopies;
@@ -76,12 +82,11 @@ public class Book {
         this.totalCopies = totalCopies;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "bookId=" + bookId +
-                ", title='" + title + '\'' +
-                ", publicationYear=" + publicationYear +
-                '}';
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

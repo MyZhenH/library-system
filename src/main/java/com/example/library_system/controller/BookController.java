@@ -1,6 +1,7 @@
 package com.example.library_system.controller;
 
 import com.example.library_system.dto.BookDTO;
+import com.example.library_system.dto.BookWithDetailsDTO;
 import com.example.library_system.entity.Book;
 import com.example.library_system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-
     private final BookService bookService;
 
     @Autowired
     public BookController(BookService bookService) {
         this.bookService = bookService;
+    }
+
+    //Book with details (with author)
+    @GetMapping("/book")
+    public List<BookWithDetailsDTO> allBooks() {
+        return bookService.allBooks();
     }
 
     @GetMapping
