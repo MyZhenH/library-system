@@ -1,5 +1,6 @@
 package com.example.library_system.controller;
 
+import com.example.library_system.dto.AuthorDTO;
 import com.example.library_system.entity.Author;
 import com.example.library_system.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/authors")
 public class AuthorController {
-
     private final AuthorService authorService;
 
     @Autowired
@@ -21,13 +21,13 @@ public class AuthorController {
     }
 
     @GetMapping
-    public List<Author> getAllAuthors() {
+    public List<AuthorDTO> getAllAuthors() {
         return authorService.getAllAuthors();
     }
 
     @GetMapping("/name/{lastName}")
-    public ResponseEntity<List<Author>> searchAuthorByLastName(@PathVariable String lastName) {
-        List<Author> author = authorService.getAuthorByLastName(lastName);
+    public ResponseEntity<List<AuthorDTO>> searchAuthorByLastName(@PathVariable String lastName) {
+        List<AuthorDTO> author = authorService.getAuthorByLastName(lastName);
 
         if (author.isEmpty()) {
             return ResponseEntity.notFound().build();

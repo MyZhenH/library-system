@@ -1,27 +1,17 @@
 package com.example.library_system.dto;
 
-public class UserDTO {
-    private Long userId;
+public class AuthorDTO {
     private String firstName;
     private String lastName;
-    private String email;
+    private String nationality;
 
-    public UserDTO() {
+    public AuthorDTO() {
     }
 
-    public UserDTO(Long userId, String firstName, String lastName, String email) {
-        this.userId = userId;
+    public AuthorDTO(String firstName, String lastName, String nationality) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+        this.nationality = nationality;
     }
 
     public String getFirstName() {
@@ -40,12 +30,11 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNationality() {
+        return nationality;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
-
 }

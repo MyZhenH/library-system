@@ -1,5 +1,6 @@
 package com.example.library_system.controller;
 
+import com.example.library_system.dto.BookDTO;
 import com.example.library_system.entity.Book;
 import com.example.library_system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBookByTitle(@RequestParam String title) {
-        List<Book> books = bookService.searchBooksByTitle(title);
+    public ResponseEntity<List<BookDTO>> searchBookByTitle(@RequestParam String title) {
+        List<BookDTO> books = bookService.searchBooksByTitle(title);
 
         if (books.isEmpty()) {
             return ResponseEntity.notFound().build();

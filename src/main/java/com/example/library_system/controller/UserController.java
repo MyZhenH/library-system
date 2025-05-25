@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -21,18 +21,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List <UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/email/{email}")
     public ResponseEntity <UserDTO> searchUserByEmail(@PathVariable String email){
-        Optional<User> user = userService.getUserEmail(email);
+        UserDTO userDTO = userService.getUserByEmail(email);
 
-        if (user.isPresent()) {
-            UserDTO userDTO = new UserDTO(user.get().getUserId(),
-                    user.get().getFirstName(),
-                    user.get().getLastName(),
-                    user.get().getEmail());
+        if (userDTO != null){
             return ResponseEntity.ok(userDTO);
-        } else
+        }else{
             return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping

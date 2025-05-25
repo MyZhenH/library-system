@@ -1,7 +1,10 @@
 package com.example.library_system.service;
 
+import com.example.library_system.dto.AuthorDTO;
 import com.example.library_system.entity.Author;
+import com.example.library_system.mapper.AuthorMapper;
 import com.example.library_system.repository.AuthorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -11,18 +14,22 @@ import java.util.Map;
 @Service
 public class AuthorService {
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-
-    public AuthorService(AuthorRepository authorRepository){
+    @Autowired
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper){
         this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
     }
 
-    public List<Author> getAllAuthors(){
-        return authorRepository.findAll();
+    public List<AuthorDTO> getAllAuthors(){
+        List<Author> authors = authorRepository.findAll();
+        return authorMapper.toDTOList(authors);
     }
 
-    public List<Author> getAuthorByLastName(String lastName){
-        return authorRepository.findByLastName(lastName);
+    public List<AuthorDTO> getAuthorByLastName(String lastName){
+        List<Author> author = authorRepository.findByLastNameContainingIgnoreCase(lastName);
+        return authorMapper.toDTOList(author);
     }
 
     public Map<String, String> addAuthor (Author author) {
