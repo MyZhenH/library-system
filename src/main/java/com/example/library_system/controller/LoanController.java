@@ -33,9 +33,8 @@ public class LoanController {
     public ResponseEntity<Loan> createLoan(@RequestParam Long userId, @RequestParam Long bookId){
             Loan loan = loanService.createLoan(userId, bookId);
             return ResponseEntity.status(HttpStatus.CREATED).body(loan);
-
-
     }
+
 
     @PutMapping("/loans/{loanId}/return")
     public ResponseEntity<Loan> returnLoan(@PathVariable Long loanId){
@@ -50,10 +49,7 @@ public class LoanController {
         return ResponseEntity.status(HttpStatus.OK).body(loan);
     }
 
-    //GET /users/{userId}/loans - Hämta användarens lån
-    //POST /loans - Låna bok (kräver userId och bookId)
-    //PUT /loans/{id}/return - Returnera bok
-    //PUT /loans/{id}/extend
+
 
 
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "loans")
@@ -14,13 +15,13 @@ public class Loan {
     private Long loanId;
 
     @Column(name = "borrowed_date", nullable = false)
-    private LocalDate borrowedDate;
+    private LocalDateTime borrowedDate;
 
     @Column(name = "due_date", nullable = false)
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Column(name = "returned_date")
-    private LocalDate returnedDate;
+    private LocalDateTime returnedDate;
 
     @ManyToOne
     @JsonIgnore
@@ -36,7 +37,7 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(Long loanId, LocalDate borrowedDate, LocalDate dueDate, LocalDate returnedDate, User user, Book book) {
+    public Loan(Long loanId, LocalDateTime borrowedDate, LocalDateTime dueDate, LocalDateTime returnedDate, User user, Book book) {
         this.loanId = loanId;
         this.borrowedDate = borrowedDate;
         this.dueDate = dueDate;
@@ -53,27 +54,27 @@ public class Loan {
         this.loanId = loanId;
     }
 
-    public LocalDate getBorrowedDate() {
+    public LocalDateTime getBorrowedDate() {
         return borrowedDate;
     }
 
-    public void setBorrowedDate(LocalDate borrowedDate) {
+    public void setBorrowedDate(LocalDateTime borrowedDate) {
         this.borrowedDate = borrowedDate;
     }
 
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDate getReturnedDate() {
+    public LocalDateTime getReturnedDate() {
         return returnedDate;
     }
 
-    public void setReturnedDate(LocalDate returnedDate) {
+    public void setReturnedDate(LocalDateTime returnedDate) {
         this.returnedDate = returnedDate;
     }
 

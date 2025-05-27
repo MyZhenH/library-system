@@ -22,9 +22,6 @@ public class Book {
     @Column(name = "total_copies")
     private int totalCopies;
 
-    //@Column(name = "author_id")
-    //private Long authorId;
-
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;

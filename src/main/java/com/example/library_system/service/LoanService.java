@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,6 @@ public class LoanService {
             throw new EntityNotFoundException("User not found.");
         }
         return loanRepository.findByUserId(userId);
-
     }
 
     @Transactional
@@ -65,8 +65,8 @@ public class LoanService {
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
-        loan.setBorrowedDate(LocalDate.now());
-        loan.setDueDate(LocalDate.now().plusDays(30));
+        loan.setBorrowedDate(LocalDateTime.now());
+        loan.setDueDate(LocalDateTime.now().plusDays(30));
         loanRepository.save(loan);
 
         //Minska bokexemplar
@@ -84,7 +84,11 @@ public class LoanService {
             throw new IllegalArgumentException("Loan not found.");
         }
         Loan loan = loanOptional.get();
-        loan.setReturnedDate(LocalDate.now());
+
+        if(loan.getReturnedDate() != null){
+            throw new IllegalArgumentException("Book already returned");
+        }
+        loan.setReturnedDate(LocalDateTime.now());
         loanRepository.save(loan);
 
         Long bookId = loan.getBook().getBookId();
@@ -94,16 +98,13 @@ public class LoanService {
             throw new IllegalArgumentException("Book not found");
         }
 
-        if(loan.getReturnedDate() != null){
-            throw new IllegalArgumentException("Book already returned");
-        }
-
         Book book = bookOptional.get();
 
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         bookRepository.save(book);
 
         return loan;
+
     }
 
     public Loan extendLoan(Long loanId){
@@ -116,15 +117,15 @@ public class LoanService {
 
         if(loan.getReturnedDate() != null){
             throw new IllegalArgumentException("Book already returned");
-
         }
 
-        if(loan.getDueDate().isBefore(LocalDate.now())){
+        if(loan.getDueDate().isBefore(LocalDateTime.now())){
           throw new IllegalArgumentException("Loan cannot extend due to overdue");
         }
 
         loan.setDueDate(loan.getDueDate().plusDays(14));
         return loanRepository.save(loan);
+
     }
 
 
