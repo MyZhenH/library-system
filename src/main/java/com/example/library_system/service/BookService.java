@@ -31,7 +31,7 @@ public class BookService {
         this.bookWithDetailsMapper = bookWithDetailsMapper;
     }
 
-    public List<BookWithDetailsDTO> allBooks() {
+    public List<BookWithDetailsDTO> getAllBooksWithDetails() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
                 .map(bookWithDetailsMapper::toDTO)

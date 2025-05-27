@@ -22,9 +22,9 @@ public class BookController {
     }
 
     //Book with details (with author)
-    @GetMapping("/book")
-    public List<BookWithDetailsDTO> allBooks() {
-        return bookService.allBooks();
+    @GetMapping("/bookWithDetails")
+    public List<BookWithDetailsDTO> getAllBooksWithDetails() {
+        return bookService.getAllBooksWithDetails();
     }
 
     @GetMapping

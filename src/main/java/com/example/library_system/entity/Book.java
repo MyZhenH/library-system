@@ -8,11 +8,18 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private Long bookId;
 
     private String title;
+
+    @Column(name = "publication_year")
     private int publicationYear;
+
+    @Column(name = "available_copies")
     private int availableCopies;
+
+    @Column(name = "total_copies")
     private int totalCopies;
 
     //@Column(name = "author_id")

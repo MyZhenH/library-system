@@ -1,7 +1,9 @@
 package com.example.library_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -9,21 +11,38 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @Column(name = "user_id")
+    private Long id;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
     private String email;
     private String password;
 
     @Column
     private LocalDateTime registrationDate;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Loan> loans;
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
 
     public User() {
     }
 
     public User(Long userId, String firstName, String lastName, String email, String password, LocalDateTime registrationDate) {
-        this.userId = userId;
+        this.id = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -33,11 +52,11 @@ public class User {
 
 
     public Long getUserId() {
-        return userId;
+        return id;
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getFirstName() {
@@ -80,13 +99,4 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

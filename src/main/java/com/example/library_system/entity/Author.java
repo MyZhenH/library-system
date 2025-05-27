@@ -10,9 +10,15 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authorId;
 
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "birth_year")
     private int birthYear;
+
     private String nationality;
 
 
