@@ -32,21 +32,19 @@ public class AuthorService {
         return authorMapper.toDTOList(author);
     }
 
-    public Map<String, String> addAuthor (Author author) {
+    public Map<String, String> addAuthor(Author author) {
         Map<String, String> response = new HashMap<>();
 
-            try {
-                authorRepository.save(author);
+        try{
+            authorRepository.save(author);
             response.put("status", "success");
             response.put("message", "Author added " + author.toString());
             return response;
 
-        } catch (Exception e) {
+        }catch (Exception e) {
             response.put("status", "error");
             response.put("message", "Database error: " + e.getMessage());
             return response;
-
-
         }
     }
 

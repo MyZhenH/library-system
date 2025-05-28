@@ -19,6 +19,7 @@ public class LoanController {
         this.loanService = loanService;
     }
 
+
     @GetMapping("/users/{userId}/loans")
     public ResponseEntity<List<Loan>> getAllLoansByUserId(@PathVariable Long userId){
         List<Loan> loansList = loanService.getAllLoansByUserId(userId);
@@ -48,11 +49,6 @@ public class LoanController {
         Loan loan = loanService.extendLoan(loanId);
         return ResponseEntity.status(HttpStatus.OK).body(loan);
     }
-
-
-
-
-
 
 
 }

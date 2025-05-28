@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -65,8 +64,8 @@ public class LoanService {
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
-        loan.setBorrowedDate(LocalDateTime.now());
-        loan.setDueDate(LocalDateTime.now().plusDays(30));
+        loan.setBorrowedDate(LocalDateTime.now().withNano(0));
+        loan.setDueDate(LocalDateTime.now().plusDays(30).withNano(0));
         loanRepository.save(loan);
 
         //Minska bokexemplar
@@ -88,7 +87,7 @@ public class LoanService {
         if(loan.getReturnedDate() != null){
             throw new IllegalArgumentException("Book already returned");
         }
-        loan.setReturnedDate(LocalDateTime.now());
+        loan.setReturnedDate(LocalDateTime.now().withNano(0));
         loanRepository.save(loan);
 
         Long bookId = loan.getBook().getBookId();

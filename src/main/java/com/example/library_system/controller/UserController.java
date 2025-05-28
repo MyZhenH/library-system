@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity <UserDTO> searchUserByEmail(@PathVariable String email){
+    public ResponseEntity<UserDTO> searchUserByEmail(@PathVariable String email){
         UserDTO userDTO = userService.getUserByEmail(email);
 
         if (userDTO != null){
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity <Map<String, String>> addUser(@RequestBody User user){
+    public ResponseEntity<Map<String, String>> addUser(@RequestBody User user){
         Map<String, String> response = userService.addUser(user);
 
         if(response.containsValue("success")){

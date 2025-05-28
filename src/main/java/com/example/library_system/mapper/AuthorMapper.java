@@ -17,6 +17,7 @@ public class AuthorMapper {
         AuthorDTO dto = new AuthorDTO();
         dto.setFirstName(author.getFirstName());
         dto.setLastName(author.getLastName());
+        dto.setBirthYear(author.getBirthYear());
         dto.setNationality(author.getNationality());
         return dto;
     }
@@ -28,6 +29,7 @@ public class AuthorMapper {
         Author author = new Author();
         author.setFirstName(dto.getFirstName());
         author.setLastName(dto.getLastName());
+        author.setBirthYear(dto.getBirthYear());
         author.setNationality(dto.getNationality());
         return author;
     }

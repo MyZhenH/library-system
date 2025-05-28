@@ -29,13 +29,12 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long bookId, String title, int publicationYear, int availableCopies, int totalCopies, Long authorId) {
+    public Book(Long bookId, String title, int publicationYear, int availableCopies, int totalCopies) {
         this.bookId = bookId;
         this.title = title;
         this.publicationYear = publicationYear;
         this.availableCopies = availableCopies;
         this.totalCopies = totalCopies;
-        //this.authorId = authorId;
     }
 
     public Long getBookId() {
@@ -69,14 +68,6 @@ public class Book {
     public void setAvailableCopies(int availableCopies) {
         this.availableCopies = availableCopies;
     }
-
-    //public Long getAuthorId() {
-      //  return authorId;
-    //}
-
-    //public void setAuthorId(Long authorId) {
-      //  this.authorId = authorId;
-    //}
 
     public int getTotalCopies() {
         return totalCopies;

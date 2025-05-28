@@ -21,20 +21,21 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    //Book with details (with author)
-    @GetMapping("/bookWithDetails")
-    public List<BookWithDetailsDTO> getAllBooksWithDetails() {
-        return bookService.getAllBooksWithDetails();
-    }
 
     @GetMapping
-    public List<BookDTO> getAllBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<BookWithDetailsDTO>> getAllBooks(){
+        List<BookWithDetailsDTO> books = bookService.getAllBooksWithDetails();
+
+        if(books.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(books);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookDTO>> searchBookByTitle(@RequestParam String title) {
-        List<BookDTO> books = bookService.searchBooksByTitle(title);
+    public ResponseEntity<List<BookWithDetailsDTO>> searchBooks(@RequestParam(required = false) String title,
+                                                                @RequestParam(required = false) String author) {
+        List<BookWithDetailsDTO> books = bookService.searchBooks(title, author);
 
         if (books.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -43,13 +44,12 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addBook(@RequestBody Book book) {
-        Map<String, String> response = bookService.addBook(book);
+    public ResponseEntity<Map<String, String>> addBook(@RequestBody BookDTO bookDTO) {
+        Map<String, String> response = bookService.addBook(bookDTO);
 
         if (response.containsValue("success")) {
             return ResponseEntity.status(201).body(response);
         } else return ResponseEntity.status(500).body(response);
-
     }
 
 }

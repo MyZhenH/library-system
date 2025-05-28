@@ -7,6 +7,7 @@ import com.example.library_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class UserService {
         Map<String, String> response = new HashMap<>();
 
         try {
+            user.setRegistrationDate(LocalDateTime.now().withNano(0));
             userRepository.save(user);
             response.put("status", "success");
             response.put("message", "User added: " + user.toString());

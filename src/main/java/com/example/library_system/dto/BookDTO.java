@@ -5,15 +5,17 @@ public class BookDTO {
     private int publicationYear;
     private int availableCopies;
     private int totalCopies;
+    private Long authorId;
 
     public BookDTO() {
     }
 
-    public BookDTO(String title, int publicationYear, int availableCopies, int totalCopies) {
+    public BookDTO(String title, int publicationYear, int availableCopies, int totalCopies, Long authorId) {
         this.title = title;
         this.publicationYear = publicationYear;
         this.availableCopies = availableCopies;
         this.totalCopies = totalCopies;
+        this.authorId = authorId;
     }
 
     public String getTitle() {
@@ -46,5 +48,13 @@ public class BookDTO {
 
     public void setTotalCopies(int totalCopies) {
         this.totalCopies = totalCopies;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }
