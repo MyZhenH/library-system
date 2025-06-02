@@ -65,7 +65,7 @@ public class LoanService {
         loan.setUser(user);
         loan.setBook(book);
         loan.setBorrowedDate(LocalDateTime.now().withNano(0));
-        loan.setDueDate(LocalDateTime.now().plusDays(30).withNano(0));
+        loan.setDueDate(LocalDateTime.now().plusDays(14).withNano(0));
         loanRepository.save(loan);
 
         //Minska bokexemplar
