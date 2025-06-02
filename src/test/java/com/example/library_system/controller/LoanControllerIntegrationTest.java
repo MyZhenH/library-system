@@ -6,7 +6,6 @@ import com.example.library_system.entity.User;
 import com.example.library_system.repository.BookRepository;
 import com.example.library_system.repository.LoanRepository;
 import com.example.library_system.repository.UserRepository;
-import com.example.library_system.service.LoanService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,9 +30,6 @@ class LoanControllerIntegrationTest {
 
     @Autowired
     private LoanRepository loanRepository;
-
-    @Autowired
-    private LoanService loanService;
 
     @Autowired
     private UserRepository userRepository;
