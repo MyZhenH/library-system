@@ -1,9 +1,22 @@
 package com.example.library_system.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UserDTO {
     private Long userId;
+
+    @NotBlank(message = "First name cannot be empty")
+    @Size(max = 50)
     private String firstName;
+
+    @NotBlank(message = "Last name cannot be empty")
+    @Size(max = 50)
     private String lastName;
+
+    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Invalid email")
     private String email;
 
     public UserDTO() {

@@ -2,16 +2,18 @@ package com.example.library_system.controller;
 
 import com.example.library_system.dto.BookDTO;
 import com.example.library_system.dto.BookWithDetailsDTO;
-import com.example.library_system.entity.Book;
+import com.example.library_system.exception.BookNotFoundException;
 import com.example.library_system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
+
 @RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
@@ -21,17 +23,19 @@ public class BookController {
         this.bookService = bookService;
     }
 
-
+    //Hämta alla böcker
     @GetMapping
     public ResponseEntity<List<BookWithDetailsDTO>> getAllBooks(){
         List<BookWithDetailsDTO> books = bookService.getAllBooksWithDetails();
 
         if(books.isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new BookNotFoundException("No books found"); //Med exceptionHandler
+            //return ResponseEntity.notFound().build(); // Utan exceptionHandler
         }
         return ResponseEntity.ok(books);
     }
 
+    //Sök efter bok utifrån boktitel eller författare
     @GetMapping("/search")
     public ResponseEntity<List<BookWithDetailsDTO>> searchBooks(@RequestParam(required = false) String title,
                                                                 @RequestParam(required = false) String author) {
@@ -43,6 +47,8 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    //Lägg till bok
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Map<String, String>> addBook(@RequestBody BookDTO bookDTO) {
         Map<String, String> response = bookService.addBook(bookDTO);

@@ -3,13 +3,14 @@ package com.example.library_system.service;
 import com.example.library_system.entity.Book;
 import com.example.library_system.entity.Loan;
 import com.example.library_system.entity.User;
+import com.example.library_system.exception.*;
 import com.example.library_system.repository.BookRepository;
 import com.example.library_system.repository.LoanRepository;
 import com.example.library_system.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,41 +25,43 @@ public class LoanService {
     private final BookRepository bookRepository;
 
     @Autowired
+    SecurityService securityService;
+
+    @Autowired
     public LoanService(LoanRepository loanRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.loanRepository = loanRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
     }
 
-    public List<Loan> getAllLoansByUserId(Long userId){
+    public List<Loan> getAllLoansByUserId(Long userId, Authentication authentication){
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            throw new EntityNotFoundException("User not found.");
+            throw new UserNotFoundException("User not found.");
+        }
+        //Validera att användaren har bara tillgång till sin lån
+        if (!securityService.hasAccessToLoan(userId, authentication)) {
+            throw new ForbiddenException("Unauthorized");
         }
         return loanRepository.findByUserId(userId);
     }
 
     @Transactional
-    public Loan createLoan(Long userId, Long bookId) {
+    public Loan createLoan(Long bookId, Authentication authentication) {
 
-        //User
-       Optional<User> userOptional = userRepository.findById(userId);
+        //Hämta inloggade användaren
+        String email = authentication.getName();
 
-        if(userOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
-        }
-        User user = userOptional.get();
+        User user = userRepository.findByEmailContainingIgnoreCase(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
 
-        //Book
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        //Hämta boken
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found."));
 
-        if(bookOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found.");
-        }
-        Book book = bookOptional.get();
-
-        if(book.getAvailableCopies() <= 0){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no copies available");
+        //Kontrollera tillgängliga bokexemplar
+        if (book.getAvailableCopies() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No copies available.");
         }
 
         Loan loan = new Loan();
@@ -68,37 +71,48 @@ public class LoanService {
         loan.setDueDate(LocalDateTime.now().plusDays(14).withNano(0));
         loanRepository.save(loan);
 
-        //Minska bokexemplar
-        book.setAvailableCopies(book.getAvailableCopies() -1);
+        //Uppdatera tillgängliga bokexemplar
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
 
         return loan;
-
     }
 
     @Transactional
-    public Loan returnLoan(Long loanId){
-      Optional<Loan> loanOptional = loanRepository.findById(loanId);
-        if (loanOptional.isEmpty()) {
-            throw new IllegalArgumentException("Loan not found.");
+    public Loan returnLoan(Long loanId, Authentication authentication) {
+        String email = authentication.getName();
+
+        // Hämta inloggad användare
+        User user = userRepository.findByEmailContainingIgnoreCase(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Hämta lånet
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan not found"));
+
+        // Kontrollera behörighet
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !loan.getUser().getUserId().equals(user.getUserId())) {
+            throw new ForbiddenException("Unauthorized");
         }
-        Loan loan = loanOptional.get();
 
         if(loan.getReturnedDate() != null){
-            throw new IllegalArgumentException("Book already returned");
+            throw new BadRequestException("Book already returned");
         }
         loan.setReturnedDate(LocalDateTime.now().withNano(0));
         loanRepository.save(loan);
 
+        //Bok
         Long bookId = loan.getBook().getBookId();
         Optional<Book> bookOptional = bookRepository.findById(bookId);
 
         if (bookOptional.isEmpty()) {
-            throw new IllegalArgumentException("Book not found");
+            throw new BookNotFoundException("Book not found");
         }
 
         Book book = bookOptional.get();
-
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         bookRepository.save(book);
 
@@ -106,20 +120,32 @@ public class LoanService {
 
     }
 
-    public Loan extendLoan(Long loanId){
-      Optional<Loan> loanOptional = loanRepository.findById(loanId);
 
-      if(loanOptional.isEmpty()){
-          throw new IllegalArgumentException("Loan not found");
+    public Loan extendLoan(Long loanId, Authentication authentication){
+        String email = authentication.getName();
+
+        // Hämta inloggad användare
+        User user = userRepository.findByEmailContainingIgnoreCase(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Hämta lånet
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan not found"));
+
+        // Kontrollera behörighet
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !loan.getUser().getUserId().equals(user.getUserId())) {
+            throw new ForbiddenException("Unauthorized");
         }
-        Loan loan = loanOptional.get();
 
         if(loan.getReturnedDate() != null){
-            throw new IllegalArgumentException("Book already returned");
+            throw new BadRequestException("Book already returned");
         }
 
         if(loan.getDueDate().isBefore(LocalDateTime.now())){
-          throw new IllegalArgumentException("Loan cannot extend due to overdue");
+          throw new BadRequestException("Loan cannot extend due to overdue");
         }
 
         loan.setDueDate(loan.getDueDate().plusDays(14));

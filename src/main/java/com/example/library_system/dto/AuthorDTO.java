@@ -47,4 +47,5 @@ public class AuthorDTO {
     public void setBirthYear(int birthYear) {
         this.birthYear = birthYear;
     }
+
 }

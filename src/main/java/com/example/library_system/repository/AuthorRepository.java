@@ -10,6 +10,7 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     List<Author> findByLastNameContainingIgnoreCase(String lastName);
+    List<Author> findByFirstNameAndLastNameAndBirthYearAndNationality(String firstName, String lastName, int birthYear, String nationality);
 
 
 

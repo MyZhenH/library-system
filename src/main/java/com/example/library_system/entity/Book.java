@@ -13,13 +13,13 @@ public class Book {
 
     private String title;
 
-    @Column(name = "publication_year")
+    @Column(name = "publication_year", nullable = false)
     private int publicationYear;
 
-    @Column(name = "available_copies")
+    @Column(name = "available_copies", nullable = false)
     private int availableCopies;
 
-    @Column(name = "total_copies")
+    @Column(name = "total_copies", nullable = false)
     private int totalCopies;
 
     @ManyToOne
