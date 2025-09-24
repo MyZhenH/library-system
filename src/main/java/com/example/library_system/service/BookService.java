@@ -10,6 +10,7 @@ import com.example.library_system.repository.AuthorRepository;
 import com.example.library_system.repository.BookRepository;
 import com.example.library_system.utils.Sanitizer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -59,6 +60,7 @@ public class BookService {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Map<String, String> addBook(BookDTO bookDTO) {
         Map<String, String> response = new HashMap<>();
 

@@ -7,6 +7,7 @@ import com.example.library_system.exception.*;
 import com.example.library_system.mapper.AuthorMapper;
 import com.example.library_system.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class AuthorService {
     }
 
     //Lägga till författare
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Map<String, String> addAuthor(Author author) {
         Map<String, String> response = new HashMap<>();
 

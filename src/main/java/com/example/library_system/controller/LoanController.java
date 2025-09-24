@@ -2,12 +2,10 @@ package com.example.library_system.controller;
 
 import com.example.library_system.entity.Loan;
 import com.example.library_system.service.LoanService;
-import com.example.library_system.service.SecurityService;
 import com.example.library_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +26,6 @@ public class LoanController {
 
 
     //Hämta användarens lån
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{userId}/loans")
     public ResponseEntity<List<Loan>> getAllLoansByUserId(@PathVariable Long userId, Authentication authentication){
 
@@ -41,7 +38,6 @@ public class LoanController {
 
     //Låna bok
     @PostMapping("/loan")
-    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Loan> createLoan(@RequestParam Long bookId, Authentication authentication) {
 
         Loan loan = loanService.createLoan(bookId, authentication);
@@ -50,7 +46,6 @@ public class LoanController {
 
 
     //Lämna tillbaks lån
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/loans/{loanId}/return")
     public ResponseEntity<Loan> returnLoan(@PathVariable Long loanId, Authentication authentication) {
 
@@ -60,36 +55,11 @@ public class LoanController {
     }
 
     //Förnya lån
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/loans/{loanId}/extend")
     public ResponseEntity<Loan> extendLoan(@PathVariable Long loanId, Authentication authentication){
 
         Loan loan = loanService.extendLoan(loanId, authentication);
         return ResponseEntity.status(HttpStatus.OK).body(loan);
     }
-
-
-
-
-
-    //*********** Tidigare kod (innan säkerhet) **********
-
-    //Gammla koden
-    //@PreAuthorize("hasRole('ROLE_USER')")
-    //@PostMapping("/loan")
-    //public ResponseEntity<Loan> createLoan(@RequestParam Long userId, @RequestParam Long bookId){
-
-    //  Loan loan = loanService.createLoan(userId, bookId);
-    //return ResponseEntity.status(HttpStatus.CREATED).body(loan);
-    //}
-
-    //Gamla koden
-    //@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    //@PutMapping("/loans/{loanId}/return")
-    //public ResponseEntity<Loan> returnLoan(@PathVariable Long loanId){
-
-        //Loan loan = loanService.returnLoan(loanId);
-        //return ResponseEntity.status(HttpStatus.OK).body(loan);
-    //}
 
 }

@@ -10,6 +10,7 @@ import com.example.library_system.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,6 +35,7 @@ public class LoanService {
         this.bookRepository = bookRepository;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public List<Loan> getAllLoansByUserId(Long userId, Authentication authentication){
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
@@ -47,6 +49,7 @@ public class LoanService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Loan createLoan(Long bookId, Authentication authentication) {
 
         //Hämta inloggade användaren
@@ -79,6 +82,7 @@ public class LoanService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Loan returnLoan(Long loanId, Authentication authentication) {
         String email = authentication.getName();
 
@@ -120,7 +124,7 @@ public class LoanService {
 
     }
 
-
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Loan extendLoan(Long loanId, Authentication authentication){
         String email = authentication.getName();
 

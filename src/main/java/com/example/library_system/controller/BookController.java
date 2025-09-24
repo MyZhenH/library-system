@@ -6,7 +6,6 @@ import com.example.library_system.exception.BookNotFoundException;
 import com.example.library_system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +47,6 @@ public class BookController {
     }
 
     //Lägg till bok
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Map<String, String>> addBook(@RequestBody BookDTO bookDTO) {
         Map<String, String> response = bookService.addBook(bookDTO);

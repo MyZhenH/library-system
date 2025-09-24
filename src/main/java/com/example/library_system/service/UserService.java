@@ -7,6 +7,7 @@ import com.example.library_system.exception.PasswordException;
 import com.example.library_system.mapper.UserMapper;
 import com.example.library_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,19 +32,20 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserDTO> getAllUsers(){
         List<User> users = userRepository.findAll();
 
         return userMapper.toDTOList(users);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserDTO getUserByEmail(String email){
         Optional<User> user = userRepository.findByEmailContainingIgnoreCase(email);
 
         return user.map(userMapper::toDTO).orElse(null);
     }
 
-    
     public Map<String, String> addUser(User user) {
         Map<String, String> response = new HashMap<>();
 

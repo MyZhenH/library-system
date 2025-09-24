@@ -7,7 +7,6 @@ import com.example.library_system.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -50,7 +49,6 @@ public class AuthorController {
     }
 
     //Lägg till författare
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity <Map<String, String>> addAuthor (@RequestBody Author author) {
         Map<String, String> response = authorService.addAuthor(author);
