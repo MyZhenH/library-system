@@ -44,5 +44,23 @@ public class SecurityService {
         return false;
     }
 
+    public boolean isAdmin(Authentication authentication) {
+        String username = authentication.getName();
+
+        Optional<User> optionalUser = userRepository.findByEmailContainingIgnoreCase(username);
+
+        if (optionalUser.isPresent()) {
+            User authenticatedUser = optionalUser.get();
+
+            // Kontrollera om den autentiserade användaren har rollen "ROLE_ADMIN"
+            if (authenticatedUser.getRole().equals("ROLE_ADMIN")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 
 }

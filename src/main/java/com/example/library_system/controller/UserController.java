@@ -24,7 +24,6 @@ public class UserController {
     }
 
     //Hämta alla användare
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         List <UserDTO> users = userService.getAllUsers();
@@ -32,7 +31,6 @@ public class UserController {
     }
 
     //Sök användare efter email
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDTO> searchUserByEmail(@PathVariable String email){
         UserDTO userDTO = userService.getUserByEmail(email);

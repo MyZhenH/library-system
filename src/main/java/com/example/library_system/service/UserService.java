@@ -1,5 +1,6 @@
 package com.example.library_system.service;
 
+import com.example.library_system.exception.ForbiddenException;
 import com.example.library_system.utils.Sanitizer;
 import com.example.library_system.dto.UserDTO;
 import com.example.library_system.entity.User;
@@ -8,6 +9,7 @@ import com.example.library_system.mapper.UserMapper;
 import com.example.library_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class UserService {
     private final UserMapper userMapper;
 
 
+    SecurityService securityService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -34,8 +38,8 @@ public class UserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserDTO> getAllUsers(){
-        List<User> users = userRepository.findAll();
 
+        List<User> users = userRepository.findAll();
         return userMapper.toDTOList(users);
     }
 
@@ -122,6 +126,7 @@ public class UserService {
         userRepository.save(user);
 
     }
+
 
 
 
